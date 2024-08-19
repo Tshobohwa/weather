@@ -20,9 +20,10 @@
             type="text"
             placeholder="search city..."
             class="search-input"
+            id="search-input"
           />
 
-          <button class="search-button">
+          <button class="search-button" id="search-btn">
             <img
               src="./assets/search-white.png"
               alt="search"
@@ -31,8 +32,35 @@
           </button>
         </div>
       </header>
-      <div class="app-container"></div>
-      <img src="./assets//sky-background.png" alt="bg" class="bg-image" />
+      <div class="forecast-container" id="forecast-container">
+        <div class="main-forecast">
+          <header class="forecast-header">
+            <p class="address">Kigali</p>
+            <p class="date">May 29 2023</p>
+          </header>
+          <p class="main-temp">23 °C</p>
+          <header class="forecast-footer">
+            <p class="small-temp">min: 18 °C</p>
+            <p class="small-temp">max: 26 °C</p>
+          </header>
+        </div>
+        <div class="details-container">
+          <div class="details">
+            <div class="forecast-header">
+              <p class="details-text">wind:</p>
+              <img src="./assets/wind.png" alt="" class="details-icon" />
+            </div>
+          </div>
+          <div class="details">
+            <div class="forecast-header">
+              <p class="details-text">humidity</p>
+              <img src="./assets//humidity.png" class="details-icon" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <img src="./assets//sky-background.jpg" alt="bg" class="bg-image" />
       <script src="script.js"></script>
     </main>
   </body>
