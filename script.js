@@ -7,8 +7,48 @@ const forecastContainer = document.getElementById("forecast-container");
 const API_KEY = "E4L9XDTZ8UTALV2644XPE5Z24";
 
 const calculateFromFareneightToCelcius = (fareneights) => {
-  const celcius = ((value - 32) * 5) / 9;
+  const celcius = ((fareneights - 32) * 5) / 9;
   return celcius.toFixed(0);
+};
+
+const renderWeatherForecast = (weather) => {
+  forecastContainer.innerHTML = `
+    
+        <div class="main-forecast">
+          <header class="forecast-header">
+            <p class="address">${weather.address}</p>
+            <p class="date">${new Date().toLocaleDateString()}</p>
+          </header>
+          <p class="main-temp">${calculateFromFareneightToCelcius(
+            weather.currentConditions.temp
+          )} °C</p>
+          <header class="forecast-footer">
+            <p class="small-temp">min: 18 °C</p>
+            <p class="small-temp">max: 26 °C</p>
+          </header>
+        </div>
+        <div class="details-container">
+          <div class="details">
+            <div class="forecast-header">
+              <p class="details-text">wind:</p>
+              <img src="./assets/wind.png" alt="" class="details-icon" />
+            </div>
+            <p class="small-value">${
+              weather.currentConditions.windspeed
+            }<span>km/h</span></p>
+          </div>
+          <div class="details">
+            <div class="forecast-header">
+              <p class="details-text">humidity</p>
+              <img src="./assets//humidity.png" class="details-icon" />
+            </div>
+            <p class="small-value">${weather.currentConditions.humidity.toFixed(
+              1
+            )}<span>%</span></p>
+          </div>
+        </div>
+
+    `;
 };
 
 const getWeatherByCoords = async (address) => {
@@ -17,16 +57,15 @@ const getWeatherByCoords = async (address) => {
       `https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${address}/?key=${API_KEY}`
     );
 
-    // Check if the response is OK (status code 200–299)
     if (!response.ok) {
       throw new Error(`Error: ${response.statusText}`);
     }
 
     const data = await response.json();
-    console.log("Weather Data:", data);
+    renderWeatherForecast(data);
+    console.log(data);
     return data; // Return the weather data if successful
   } catch (error) {
-    console.error("Failed to fetch weather data:", error);
     return { error: error.message }; // Handle the error case
   }
 };
@@ -35,34 +74,4 @@ searchButton.addEventListener("click", () =>
   getWeatherByCoords(searchInput.value)
 );
 
-// Get current location of the user to display his local weather
-
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(showPosition, showError);
-} else {
-  console.log("Geolocation is not supported by this browser.");
-}
-
-function showPosition(position) {
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-  getWeatherByCoords(`${latitude}, ${longitude}`);
-  console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-}
-
-function showError(error) {
-  switch (error.code) {
-    case error.PERMISSION_DENIED:
-      console.log("User denied the request for Geolocation.");
-      break;
-    case error.POSITION_UNAVAILABLE:
-      console.log("Location information is unavailable.");
-      break;
-    case error.TIMEOUT:
-      console.log("The request to get user location timed out.");
-      break;
-    case error.UNKNOWN_ERROR:
-      console.log("An unknown error occurred.");
-      break;
-  }
-}
+getWeatherByCoords(`Kigali`);
